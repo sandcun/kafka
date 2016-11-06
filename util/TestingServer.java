@@ -42,18 +42,10 @@ public class TestingServer  {
 		//System.out.println("myPath :" + myPath);
 	}
 	
-	/*
-	public String getPath(){
-		return myPath;
-	}
-	*/
-	
 	public int getSeq(){
-		
 		//System.out.println(myPath.substring(TestingServer.leaderPath.length()));
 		return new Integer(myPath.substring(TestingServer.leaderPath.length())).intValue();
 	}
-	
 	
 	/**
 	 * 
