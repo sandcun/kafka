@@ -11,7 +11,7 @@ import org.apache.zookeeper.ZooKeeper;
 import sand.util.TestingServer;
 
 /**
- * 阻塞调用
+ * 闃诲璋冪敤
  * @author Ivan
  *
  */
@@ -42,19 +42,19 @@ public class LeaderLatch {
 		ZooKeeper zk = ts.getZk();
 		//String myPath = ts.getPath();
 		int mySeq = ts.getSeq();
-		//获取前序节点
+		//鑾峰彇鍓嶅簭鑺傜偣
 		String preNode = ts.getPreNode(zk,mySeq);
 		System.out.println("preNode :" + preNode);
-		//最小节点没有前序节点，竞争为leader
+		//鏈�灏忚妭鐐规病鏈夊墠搴忚妭鐐癸紝绔炰簤涓簂eader
 		if(preNode == null){
 			System.out.println("I am leader, my LeaderSeq = "+mySeq);
 			LeaderState = true;
 			return true;
 		}else{
 			LeaderState = false;
-			//其他节点均为follower节点
+			//鍏朵粬鑺傜偣鍧囦负follower鑺傜偣
 			System.out.println("I am follower, my LeaderSeq = "+mySeq);
-			//创建watcher，watch前序节点
+			//鍒涘缓watcher锛寃atch鍓嶅簭鑺傜偣
 			System.out.println("I am watching : " + preNode);
 			this.setWatcher(zk, mySeq, preNode);
 			await();
@@ -81,15 +81,15 @@ public class LeaderLatch {
 				
 				System.out.println(event.getPath() + "|" + event.getType().name());
 				try{
-					//前序节点挂掉，则重新选择前序节点
+					//鍓嶅簭鑺傜偣鎸傛帀锛屽垯閲嶆柊閫夋嫨鍓嶅簭鑺傜偣
 					if(event.getType().name().equals("NodeDeleted")){
 						String preNode = ts.getPreNode(zk,mySeq);
-						//无前序节点，则当前为最小节点，竞争为leader
+						//鏃犲墠搴忚妭鐐癸紝鍒欏綋鍓嶄负鏈�灏忚妭鐐癸紝绔炰簤涓簂eader
 						if(preNode == null){
 							System.out.println("I am leader and seq = "+mySeq);
 							LeaderState = true;
 						}else{
-							//继续watch前序节点
+							//缁х画watch鍓嶅簭鑺傜偣
 							zk.exists(preNode, this);
 							System.out.println("PreNode is down , change preNode as : " + preNode);								
 						}
