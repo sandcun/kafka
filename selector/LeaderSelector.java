@@ -12,7 +12,7 @@ import sand.latch.LeaderLatch;
 import sand.util.TestingServer;
 
 /**
- * 回调函数
+ * 鍥炶皟鍑芥暟
  * @author Ivan
  *
  */
@@ -22,7 +22,7 @@ public class LeaderSelector {
     private LeaderSelectorListener listener;
    
     /**
-     * 设置listener
+     * 璁剧疆listener
      * @param listener
      */
     public void setListener(LeaderSelectorListener listener){
@@ -30,7 +30,7 @@ public class LeaderSelector {
     }
     
     /**
-     * 设置click事件，并绑定listener
+     * 璁剧疆click浜嬩欢锛屽苟缁戝畾listener
      */
     public void click() {
         listener.takeLeadership(this);
@@ -42,19 +42,19 @@ public class LeaderSelector {
 		ZooKeeper zk = ts.getZk();
 		//String myPath = ts.getPath();
 		int mySeq = ts.getSeq();
-		//获取前序节点
+		//鑾峰彇鍓嶅簭鑺傜偣
 		String preNode = ts.getPreNode(zk,mySeq);
 		//System.out.println("preNode :" + preNode);
-		//最小节点没有前序节点，竞争为leader
+		//鏈�灏忚妭鐐规病鏈夊墠搴忚妭鐐癸紝绔炰簤涓簂eader
 		if(preNode == null){
 			System.out.println("I am leader, my LeaderSeq = "+mySeq);
-			//触发事件
+			//瑙﹀彂浜嬩欢
 			click();
 			return true;
 		}else{
-			//其他节点均为follower节点
+			//鍏朵粬鑺傜偣鍧囦负follower鑺傜偣
 			System.out.println("I am follower, my LeaderSeq = "+mySeq);
-			//创建watcher，watch前序节点
+			//鍒涘缓watcher锛寃atch鍓嶅簭鑺傜偣
 			System.out.println("I am watching : " + preNode);
 			this.setWatcher(zk, mySeq, preNode);
 		}
@@ -69,16 +69,16 @@ public class LeaderSelector {
 				
 				System.out.println(event.getPath() + "|" + event.getType().name());
 				try{
-					//前序节点挂掉，则重新选择前序节点
+					//鍓嶅簭鑺傜偣鎸傛帀锛屽垯閲嶆柊閫夋嫨鍓嶅簭鑺傜偣
 					if(event.getType().name().equals("NodeDeleted")){
 						String preNode = ts.getPreNode(zk,mySeq);
-						//无前序节点，则当前为最小节点，竞争为leader
+						//鏃犲墠搴忚妭鐐癸紝鍒欏綋鍓嶄负鏈�灏忚妭鐐癸紝绔炰簤涓簂eader
 						if(preNode == null){
 							System.out.println("I am leader and seq = "+mySeq);
-							//触发事件
+							//瑙﹀彂浜嬩欢
 							click();
 						}else{
-							//继续watch前序节点
+							//缁х画watch鍓嶅簭鑺傜偣
 							zk.exists(preNode, this);
 							System.out.println("PreNode is down , change preNode as : " + preNode);								
 						}
