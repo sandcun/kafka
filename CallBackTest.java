@@ -10,7 +10,7 @@ public class CallBackTest {
     	LeaderSelector ls=new LeaderSelector();
         ls.setListener(new LeaderBusness());
         
-        System.out.println("¿ªÊ¼¾ºÕùLeader");
+        System.out.println("å¼€å§‹ç«žäº‰Leader");
 		ls.start();
         Thread.sleep(100000);
         
