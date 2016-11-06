@@ -57,16 +57,16 @@ public class TestingServer  {
 	
 	/**
 	 * 
-	 * @param zk zookeeper¶ÔÏó
-	 * @param mySeq µ±Ç°½ÚµãĞòºÅ
-	 * @return Èç¹ûµ±Ç°½ÚµãÎª×îĞ¡½ÚµãÔò·µ»ØNull,·ñÔò·µ»ØÇ°Ğò½Úµã
+	 * @param zk zookeeperå¯¹è±¡
+	 * @param mySeq å½“å‰èŠ‚ç‚¹åºå·
+	 * @return å¦‚æœå½“å‰èŠ‚ç‚¹ä¸ºæœ€å°èŠ‚ç‚¹åˆ™è¿”å›Null,å¦åˆ™è¿”å›å‰åºèŠ‚ç‚¹
 	 * @throws KeeperException
 	 * @throws InterruptedException
 	 */
 	public static String getPreNode(ZooKeeper zk, int mySeq) throws KeeperException, InterruptedException{
-		//»ñÈ¡¸¸½ÚµãÏÂµÄËùÓĞ×Ó½Úµã
+		//è·å–çˆ¶èŠ‚ç‚¹ä¸‹çš„æ‰€æœ‰å­èŠ‚ç‚¹
 		List<String> list = zk.getChildren(fartherPath, null);
-		//È¡Ç°Ğò½Úµã
+		//å–å‰åºèŠ‚ç‚¹
 		Iterator<String> it = list.iterator();
 		String path=null;
 		String res = null;
@@ -76,7 +76,7 @@ public class TestingServer  {
 
 			//System.out.println("path substring "+path.substring(6));
 			int seq = new Integer(path.substring(6)).intValue();
-			//Ğ¡ÓÚmySeqµÄ×î´óÖµ
+			//å°äºmySeqçš„æœ€å¤§å€¼
 			if(seq > seqMax && seq < mySeq){
 				seqMax = seq;
 				res = fartherPath+"/"+path;
